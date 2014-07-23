@@ -1,0 +1,80 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MyIP.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Helpers="using:MyIP.Helpers"
+    x:Class="MyIP.Views.MainPage"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+	<Page.Resources>
+		<Helpers:NetworkConnectivityToBackgroundBrushConverter x:Key="NetworkConnectivityToBackgroundBrushConverter"/>
+		<DataTemplate x:Key="IPInfoItemTemplate">
+			<Grid>
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Border Background="{ThemeResource ListViewItemPlaceholderBackgroundThemeBrush}" Margin="0,9.5,0,0">
+					<Image Height="79" Width="79"/>
+				</Border>
+				<StackPanel Grid.Column="1" Margin="14.5,0,0,0">
+					<TextBlock Text="{Binding IPAddress}" Style="{ThemeResource ListViewItemTextBlockStyle}"/>
+					<TextBlock Text="{Binding InterfaceType}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
+					<TextBlock Text="{Binding InterfaceName}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Margin="0,0,-0.667,0"/>
+					<TextBlock Text="{Binding NetworkConnectivityLevel}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}" Margin="0,0,-1.667,0"/>
+				</StackPanel>
+			</Grid>
+		</DataTemplate>
+		<DataTemplate x:Key="IPInfoItemTemplate1">
+			<Grid Tapped="OnIPItemGridTapped">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="Auto"/>
+					<ColumnDefinition/>
+				</Grid.ColumnDefinitions>
+				<Border Margin="0,0,0,9.5">
+					<Border Height="86" Width="86" Background="{Binding NetworkConnectivityLevel, Converter={StaticResource NetworkConnectivityToBackgroundBrushConverter}}" Margin="0,6"/>
+				</Border>
+				<StackPanel Grid.Column="1" Margin="14.5,0,0,0">
+					<TextBlock Text="{Binding IPAddress}" Style="{ThemeResource ListViewItemTextBlockStyle}" FontSize="21.333"/>
+					<TextBlock Text="{Binding InterfaceType}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
+					<TextBlock Text="{Binding InterfaceName}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
+					<TextBlock Text="{Binding NetworkConnectivityLevelString}" Style="{ThemeResource ListViewItemSubheaderTextBlockStyle}"/>
+				</StackPanel>
+			</Grid>
+		</DataTemplate>
+	</Page.Resources>
+	<Page.BottomAppBar>
+		<CommandBar>
+			<AppBarButton Icon="Sync" Label="Refresh" Click="OnRefreshButtonClicked" />
+		</CommandBar>
+	</Page.BottomAppBar>
+
+	<Grid x:Name="LayoutRoot" d:DataContext="{d:DesignData /SampleData/MainPageViewModelSampleData.xaml}">
+
+		<Grid.ChildrenTransitions>
+			<TransitionCollection>
+				<EntranceThemeTransition/>
+			</TransitionCollection>
+		</Grid.ChildrenTransitions>
+
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto"/>
+			<RowDefinition Height="*"/>
+		</Grid.RowDefinitions>
+
+		<!-- タイトル パネル -->
+		<StackPanel Grid.Row="0" Margin="19,0,0,0">
+			<TextBlock Style="{ThemeResource TitleTextBlockStyle}" Margin="0,12,0,0" Text="My IP"/>
+			<TextBlock Margin="0,-6.5,0,26.5" Style="{ThemeResource HeaderTextBlockStyle}" CharacterSpacing="{ThemeResource PivotHeaderItemCharacterSpacing}" Text="Profiles"/>
+		</StackPanel>
+
+        <!--TODO: 現在の項目の詳細を表示するには、コンテンツを-->
+		<Grid Grid.Row="1" x:Name="ContentRoot" Margin="19,9.5,19,0">
+			<ListView ItemTemplate="{StaticResource IPInfoItemTemplate1}" ItemsSource="{Binding IPInformation}"/>
+
+		</Grid>
+		<ProgressRing IsActive="{Binding IsLoading}" Grid.RowSpan="2"/>
+	</Grid>
+</Page>

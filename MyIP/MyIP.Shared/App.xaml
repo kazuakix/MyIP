@@ -1,0 +1,12 @@
+﻿<Application
+    x:Class="MyIP.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MyIP">
+	<Application.Resources>
+		<SolidColorBrush x:Key="NoneConnectivityBrush" Color="#FFB91A0C"/>
+		<SolidColorBrush x:Key="LimitedConnectivityBrush" Color="#FFAA8670"/>
+		<SolidColorBrush x:Key="InternetConnectivityBrush" Color="#FF0776A7"/>
+	</Application.Resources>
+
+</Application>
